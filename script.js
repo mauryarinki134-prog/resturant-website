@@ -4,6 +4,7 @@
 const canvas = document.getElementById('scroll-canvas');
 const ctx = canvas.getContext('2d');
 const FRAME_COUNT = 240;
+const isMobile = () => window.innerWidth < 768;
 
 // Set canvas to cover full viewport
 function resizeCanvas() {
@@ -156,18 +157,21 @@ window.selectCategory = function(catId) {
 
 function renderCategories() {
     const container = document.getElementById('categories-container');
+    const mobile = window.innerWidth < 640;
+    const circleSize = mobile ? 'w-20 h-20' : 'w-28 h-28';
+    const wrapSize  = mobile ? 'w-[86px] h-[86px]' : 'w-28 h-28';
     container.innerHTML = CATEGORIES.map(cat => {
         const active = activeCategory === cat.id;
         return `
         <button onclick="selectCategory('${cat.id}')" class="cat-btn flex flex-col items-center text-center group ${active ? 'active' : ''}">
-            <div class="w-28 h-28 rounded-full p-1.5 ${active ? 'ring-2 ring-[#e5a853] shadow-[0_0_24px_rgba(229,168,83,0.4)]' : 'ring-1 ring-[#3a2d24] hover:ring-[#d4a373]'} transition-all duration-300">
+            <div class="${wrapSize} rounded-full p-1 sm:p-1.5 ${active ? 'ring-2 ring-[#e5a853] shadow-[0_0_24px_rgba(229,168,83,0.4)]' : 'ring-1 ring-[#3a2d24] hover:ring-[#d4a373]'} transition-all duration-300">
                 <div class="w-full h-full rounded-full overflow-hidden border border-[#2c221a] bg-[#14100e]">
-                    <img src="${cat.image}" alt="${cat.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <img src="${cat.image}" alt="${cat.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
                 </div>
             </div>
-            <h3 class="mt-3 font-cinzel text-sm font-bold tracking-[0.18em] ${active ? 'text-[#e5a853]' : 'text-[#f5efe6] group-hover:text-[#d4a373]'} transition-colors">${cat.name}</h3>
-            <span class="text-[11px] text-[#9e9183] mt-0.5">${cat.count} Items</span>
-            <div class="mt-2 h-px transition-all duration-300 ${active ? 'w-10 bg-[#e5a853]' : 'w-5 bg-[#6e1e2b] group-hover:w-8 group-hover:bg-[#d4a373]'}"></div>
+            <h3 class="mt-2 sm:mt-3 font-cinzel text-[10px] sm:text-sm font-bold tracking-[0.15em] ${active ? 'text-[#e5a853]' : 'text-[#f5efe6] group-hover:text-[#d4a373]'} transition-colors">${cat.name}</h3>
+            <span class="text-[9px] sm:text-[11px] text-[#9e9183] mt-0.5">${cat.count} Items</span>
+            <div class="mt-1.5 h-px transition-all duration-300 ${active ? 'w-8 bg-[#e5a853]' : 'w-4 bg-[#6e1e2b] group-hover:w-6 group-hover:bg-[#d4a373]'}"></div>
         </button>`;
     }).join('');
 }
@@ -293,6 +297,26 @@ window.subscribeNewsletter = function(e) {
         showNotification('📧 Subscribed successfully!');
     }
 };
+
+
+// ═══════════════════════════════════════════
+// MOBILE / HAMBURGER MENU
+// ═══════════════════════════════════════════
+window.toggleMobileMenu = function() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('open');
+};
+window.closeMobileMenu = function() {
+    document.getElementById('mobile-menu').classList.remove('open');
+};
+// Close mobile menu on outside click
+document.addEventListener('click', (e) => {
+    const menu = document.getElementById('mobile-menu');
+    const ham  = document.getElementById('hamburger');
+    if (menu && menu.classList.contains('open') && !menu.contains(e.target) && !ham.contains(e.target)) {
+        menu.classList.remove('open');
+    }
+});
 
 
 // ═══════════════════════════════════════════
