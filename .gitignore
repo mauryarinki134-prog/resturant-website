@@ -1,0 +1,7 @@
+# Files to exclude from git
+node/
+node_modules/
+savoria-restaurant/node_modules/
+*.zip
+*.log
+.env
