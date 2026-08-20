@@ -2,6 +2,8 @@
 node/
 node_modules/
 savoria-restaurant/node_modules/
-*.zip
+PortableGit/
+PortableGit.exe
+push-to-github.ps1
 *.log
 .env
